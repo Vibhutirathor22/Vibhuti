@@ -1,0 +1,41 @@
+<apex:page controller="InvoiceListController"> 
+   <apex:form >
+       <apex:pageBlock title="Invoices" >
+                 <html>
+                    <body>
+                      <table  width="100%">  
+                         <tr>
+                            <th> Name</th>
+                            <th>Owner name</th>
+                               <th>Amount Due</th>
+                               <th>Amount Paid</th>
+                               <th>Days Overdue</th>
+                               <th>Due Date</th>
+                               <th>Invoice Date</th>
+                               <th>Status</th>
+                               <th>Total</th>
+                         </tr>
+                        
+                    <apex:repeat value="{!AllList}" var="veh">
+                        <tr>
+                            <td> <apex:outputlink value="/{!veh.id}">{!veh.name}</apex:outputlink></td>          
+                          <td> {!veh.owner.name} </td>
+                            <td> {!veh.Amount_Due__c} </td>
+                            <td> {!veh.Amount_Paid__c} </td>
+                            <td> {!veh.Days_Overdue__c} </td>
+                            <td> {!veh.Due_Date__c} </td>
+                            <td> {!veh.Invoice_Date__c} </td>
+                            <td> {!veh.Status__c} </td>
+                            <td> {!veh.Total__c} </td>
+          
+                      </tr>
+                     
+               </apex:repeat>               
+               </table>
+     
+               </body>
+               </html>
+           </apex:pageBlock>
+      </apex:form>
+
+</apex:page>
