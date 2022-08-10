@@ -2,7 +2,7 @@ public class InvoiceListController
 {
      public list<Invoice__c> AllList{get;set;}
     {
-        AllList=[SELECT Id,Name, owner.name,Amount_Due__c,	Amount_Paid__c,Days_Overdue__c,Due_Date__c,Invoice_Date__c,	Status__c,Total__c  FROM Invoice__c];
+        AllList=[SELECT Id,Name, owner.name,Amount_Due__c,Amount_Paid__c,Days_Overdue__c,Due_Date__c,Invoice_Date__c,Status__c,Total__c  FROM Invoice__c];
     }
 
     
