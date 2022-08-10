@@ -1,41 +1,103 @@
-<apex:page controller="InvoiceListController"> 
-   <apex:form >
-       <apex:pageBlock title="Invoices" >
-                 <html>
-                    <body>
-                      <table  width="100%">  
-                         <tr>
-                            <th> Name</th>
-                            <th>Owner name</th>
-                               <th>Amount Due</th>
-                               <th>Amount Paid</th>
-                               <th>Days Overdue</th>
-                               <th>Due Date</th>
-                               <th>Invoice Date</th>
-                               <th>Status</th>
-                               <th>Total</th>
-                         </tr>
-                        
-                    <apex:repeat value="{!AllList}" var="veh">
-                        <tr>
-                            <td> <apex:outputlink value="/{!veh.id}">{!veh.name}</apex:outputlink></td>          
-                          <td> {!veh.owner.name} </td>
-                            <td> {!veh.Amount_Due__c} </td>
-                            <td> {!veh.Amount_Paid__c} </td>
-                            <td> {!veh.Days_Overdue__c} </td>
-                            <td> {!veh.Due_Date__c} </td>
-                            <td> {!veh.Invoice_Date__c} </td>
-                            <td> {!veh.Status__c} </td>
-                            <td> {!veh.Total__c} </td>
-          
-                      </tr>
-                     
-               </apex:repeat>               
-               </table>
-     
-               </body>
-               </html>
-           </apex:pageBlock>
-      </apex:form>
-
+<apex:page controller="InvoiceListController" lightningStylesheets="true" > 
+    <apex:slds /> 
+    <style type="text/css">
+        .custPopup{
+        background-color: white;
+        border-width: 2px;
+        border-style: solid;
+        z-index: 9999;
+        left: 50%;
+        padding:15px;
+        position: absolute;
+        width: 500px;
+        height:200px;
+        margin-left: -250px;
+        top:100px;
+        }
+        .popupBackground{
+        background-color:black;
+        opacity: 0.20;
+        filter: alpha(opacity = 20);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        }
+        
+    </style>
+    <apex:form >
+        <apex:pageBlock title="Invoices">
+             <html>
+                <body>
+                    <div class="slds-scope">
+                        <table  width="100%" class="slds-table slds-table_cell-buffer slds-table_bordered">  
+                            <tr  style="background-color:LightGray !important;font-weight: bold !important">
+                                <th class="" scope="col">
+                                    <div class="slds-truncate " title="Name">Name</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Name"> Account Name </div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Name">Amount Due</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Name">Amount Paid</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Name">Days Overdue</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Name">Due Date</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Name">Invoice Date</div>
+                                </th><th class="" scope="col">
+                                <div class="slds-truncate" title="Name">Status</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Name">Total</div>
+                                </th>
+                            </tr>
+                            <apex:repeat value="{!AllList}" var="veh">
+                                <tr class="slds-hint-parent">
+                                    <td class="slds-truncate">
+                                        <apex:outputlink value="https://dhruvsoftservicesprivateli5-dev-ed--c.vf.force.com/apex/Custom_Detailpage?id={!veh.id}">{!veh.name}</apex:outputlink>    
+                                    </td>          
+                                    <td class="slds-truncate"> 
+                                        {!veh.Account__r.Name} 
+                                    </td>
+                                    <td class="slds-truncate">
+                                        {!veh.Amount_Due__c} 
+                                    </td>
+                                    <td class="slds-truncate">
+                                        {!veh.Amount_Paid__c}
+                                    </td>
+                                    <td class="slds-truncate">
+                                        {!veh.Days_Overdue__c} 
+                                    </td>
+                                    <td class="slds-truncate"> 
+                                        <apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!veh.Due_Date__c}" /> </apex:outputText>  
+                                    </td>
+                                    <td class="slds-truncate">
+                                        <apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!veh.Invoice_Date__c}" /> </apex:outputText> 
+                                    </td>
+                                    <td class="slds-truncate"> 
+                                        {!veh.Status__c} 
+                                    </td>
+                                    <td class="slds-truncate"> 
+                                        {!veh.Total__c}
+                                    </td>
+                                </tr>
+                            </apex:repeat>      
+                        </table>
+                        <br/>
+                        <center><apex:commandButton value="New" /></center>  
+                    </div>
+                </body>
+            </html>
+          </apex:pageBlock>
+    </apex:form>
 </apex:page>
