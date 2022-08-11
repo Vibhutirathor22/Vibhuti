@@ -4,9 +4,9 @@
         <style type="text/css">
             
             .customPopup {
-   background-color: white !important;
-           border-style: groove !important;
-
+            background-color: white !important;
+            border-style: groove !important;
+            
             left: 36%;
             
             padding: 5px;
@@ -39,9 +39,9 @@
             
         </style>
         <script> 
-     function  refresh(){
-   sforce.one.back(true);
-}
+        function  refresh(){
+            sforce.one.back(true);
+        }
         
         </script>
         <apex:pageBlock >
@@ -62,15 +62,15 @@
                         <apex:inputField value="{! inv.Invoice_Date__c}" showDatePicker="false" type="date" style="width: 200px;"/>
                         <apex:inputField value="{! inv.Due_Date__c}" showDatePicker="false" type="date" style="width: 200px;" />
                     </apex:pageblockSection>
-
-       
+                    
+                    
                     <center>
                         <apex:commandButton value="Save" action="{!saveInvoice}"  reRender="popup,ReloadAgain" oncomplete="refresh()">
                         </apex:commandButton>
                         <apex:commandButton value="Cancel" title="Close the popup" action="{!closePopup}"  reRender="popup" >
                         </apex:commandButton>
                     </center>
-            
+                    
                     
                 </apex:outputPanel>
             </apex:outputPanel>
@@ -162,7 +162,7 @@
                                 
                             </div>
                             <div>
-                
+                                
                                 <center> <apex:commandButton value="New" action="{!showPopup}" rerender="popup" status="status"  /></center>
                                 
                             </div>
