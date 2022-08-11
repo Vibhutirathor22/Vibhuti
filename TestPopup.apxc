@@ -1,0 +1,60 @@
+public  class TestPopup {
+    
+    public Boolean displayPopup {get;set;}
+    Public Invoice__c inv {set;get;}
+    public list<Invoice__c> AllList{get;set;}
+    public string SelectedInvoiceId { get; set; }
+    public string Choose {get;set;}
+    
+    public TestPopup() {
+        
+        inv= new Invoice__c();
+        InvoiceListController();
+        
+    }
+    
+    public void InvoiceListController()
+    {
+        AllList=[SELECT Id,Name,Account__r.Name,owner.name,Amount_Due__c,Amount_Paid__c,Days_Overdue__c,Due_Date__c,Invoice_Date__c,Status__c,Total__c FROM Invoice__c];
+    }
+    
+    
+    
+    
+    public void saveInvoice(){
+        Integer status = 0;
+        list<Invoice__c> verifyData = [Select id,name from Invoice__c];
+        for(Invoice__c rec:verifyData){
+            if(rec.id==SelectedInvoiceId){
+                status=1;
+            }
+        }
+        if(status==0)
+            insert inv;
+        else{
+            inv.id = SelectedInvoiceId;
+            update inv;
+            status=0;
+        }
+        
+        InvoiceListController();
+        displaypopup = false;
+    }
+    public void showPopup()
+    {
+        
+        displayPopup = true;
+        
+        
+    }
+    
+    public void closePopup() {
+        displayPopup = false;
+        
+    }
+    
+    
+    
+    
+    
+}
