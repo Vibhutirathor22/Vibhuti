@@ -1,14 +1,28 @@
 <apex:page docType="html-5.0" Controller="TestPopup" lightningStylesheets="true">
     <apex:slds /> 
+    <script type="text/javascript"> 
+    function  refresh(){
+        sforce.one.back(true);
+    }
+    function tablesort(){
+        document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+            const table = th.closest('table');
+            const tbody = table.querySelector('tbody');
+            Array.from(tbody.querySelectorAll('tr'))
+            .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+            .forEach(tr => tbody.appendChild(tr) );
+            console.log('test');
+        }
+                                                                                    console.log('test');                                                                         
+                                                                          
+                                                                          </script>
     <apex:form id="form">
         <style type="text/css">
             
             .customPopup {
             background-color: white !important;
             border-style: groove !important;
-            
             left: 36%;
-            
             padding: 5px;
             position: absolute;
             z-index: 9999;
@@ -38,16 +52,11 @@
             
             
         </style>
-        <script> 
-        function  refresh(){
-            sforce.one.back(true);
-        }
         
-        </script>
         <apex:pageBlock >
-            <div class ="{!Choose}">
-                <apex:messages id="error"/>
-            </div>
+            
+            <apex:messages id="Message"/>
+            
             
             
             
@@ -84,95 +93,275 @@
                             <b> <div class="slds-text-heading_medium">Invoices</div></b>
                             <br/>
                             <div class="slds-scope">
-                                <table  width="100%" class="slds-table slds-table_cell-buffer slds-table_bordered"  >  
-                                    
-                                    <tr style="background-color:LightGray !important;font-weight: bold !important" class="slds-line-height_reset">
-                                        <th class="" scope="col">
-                                            <div class="slds-truncate " style="font-weight:bold" title="Action">Action</div>
-                                        </th>
-                                        <th class="" scope="col">
-                                            <div class="slds-truncate" style="font-weight:bold" title="Invoice Number">Invoice Number</div>
-                                        </th>
-                                        <th class="" scope="col">
-                                            <div class="slds-truncate" style="font-weight:bold" title="Account Name"> Account Name </div>
-                                        </th>
-                                        <th class="" scope="col">
-                                            <div class="slds-truncate" style="font-weight:bold" title="Amount Due">Amount Due</div>
-                                        </th>
-                                        <th class="" scope="col">
-                                            <div class="slds-truncate" style="font-weight:bold" title="Amount Paid">Amount Paid</div>
-                                        </th>
-                                        <th class="" scope="col">
-                                            <div class="slds-truncate" style="font-weight:bold" title="Days Overdue">Days Overdue</div>
-                                        </th>
-                                        <th class="" scope="col">
-                                            <div class="slds-truncate" style="font-weight:bold" title="Due Date">Due Date</div>
-                                        </th>
-                                        <th class="" scope="col">
-                                            <div class="slds-truncate" style="font-weight:bold" title="Invoice Date">Invoice Date</div>
-                                        </th><th class="" scope="col">
-                                        <div class="slds-truncate" style="font-weight:bold" title="Status">Status</div>
-                                        </th>
-                                        <th class="" scope="col">
-                                            <div class="slds-truncate" style="font-weight:bold" title="Total">Total</div>
-                                        </th>
-                                    </tr>
-                                    <apex:repeat value="{!AllList}" var="veh">
-                                        <tr class="slds-hint-parent">
-                                            <td class="slds-truncate" scope="row">
-                                                <apex:commandLink reRender="popup" value="Edit" style="font-weight:bold">
-                                                    <apex:param name="accountid" value="{!veh.Id}" assignTo="{!SelectedAccountId}"/>
-                                                </apex:commandLink>&nbsp;|&nbsp;
-                                                <apex:commandLink reRender="form,delete" value="Delete" style="font-weight:bold">
-                                                    <apex:param name="accountid" value="{!veh.Id}" assignTo="{!SelectedAccountId}"/>
-                                                </apex:commandLink> 
-                                            </td>    
-                                            
-                                            <td class="slds-truncate" scope="row">
-                                                <apex:outputlink value="https://dhruvsoftservicesprivateli5-dev-ed--c.vf.force.com/apex/Custom_Detailpage?id={!veh.id}">{!veh.name}</apex:outputlink>    
-                                            </td>          
-                                            <td class="slds-truncate" scope="row"> 
-                                                {!veh.account__r.Name} 
-                                            </td>
-                                            <td class="slds-truncate" scope="row">
-                                                {!veh.Amount_Due__c} 
-                                            </td>
-                                            <td class="slds-truncate" scope="row">
-                                                {!veh.Amount_Paid__c}
-                                            </td>
-                                            <td class="slds-truncate" scope="row">
-                                                {!veh.Days_Overdue__c} 
-                                            </td>
-                                            <td class="slds-truncate" scope="row"> 
-                                                <apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!veh.Due_Date__c}" /> </apex:outputText>  
-                                            </td>
-                                            <td class="slds-truncate" scope="row">
-                                                <apex:outputText value="{0,date,MM/dd/yy}"> <apex:param value="{!veh.Invoice_Date__c}" /> </apex:outputText> 
-                                            </td>
-                                            <td class="slds-truncate" scope="row"> 
-                                                {!veh.Status__c} 
-                                            </td>
-                                            <td class="slds-truncate" scope="row"> 
-                                                {!veh.Total__c}
-                                            </td>
+                                <table aria-multiselectable="false" class="slds-table slds-table_bordered slds-table_fixed-layout  slds-table_resizable-cols" role="grid" aria-label="Invoices List" onclick="tablesort()">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th aria-label="Invoice Number" aria-sort="none" class="slds-is-sortable slds-cell_action-mode" scope="col">
+                                                <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
+                                                    <span class="slds-assistive-text">Sort by: </span>
+                                                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                                        <span class="slds-truncate" title="Invoice Number">Invoice Number</span>
+                                                        <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                                <use xlink="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"></use>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Invoice Number column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-533" max="1000" min="20" tabindex="0" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th aria-label="Account Name" aria-sort="none" class="slds-is-sortable slds-cell_action-mode" scope="col">
+                                                <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
+                                                    <span class="slds-assistive-text">Sort by: </span>
+                                                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                                        <span class="slds-truncate" title="Account Name">Account Name</span>
+                                                        <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                                <use xlink="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"></use>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Account Name column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-534" max="1000" min="20" tabindex="0" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th aria-label="Invoice Date" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                                                <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
+                                                    <span class="slds-assistive-text">Sort by: </span>
+                                                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                                        <span class="slds-truncate" title="Invoice Date">Invoice Date</span>
+                                                        <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                                <use xlink="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"></use>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Invoice Date column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-535" max="1000" min="20" tabindex="0" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th aria-label="Due Date" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                                                <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
+                                                    <span class="slds-assistive-text">Sort by: </span>
+                                                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                                        <span class="slds-truncate" title="Due Date">Due Date</span>
+                                                        <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                                <use xlink="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"></use>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Due Date column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-536" max="1000" min="20" tabindex="0" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th aria-label="Amount Paid" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                                                <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
+                                                    <span class="slds-assistive-text">Sort by: </span>
+                                                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                                        <span class="slds-truncate" title="Amount Paid">Amount Paid</span>
+                                                        <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                                <use xlink="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"></use>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Amount Paid column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-537" max="1000" min="20" tabindex="0" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th aria-label="Amount Due" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                                                <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
+                                                    <span class="slds-assistive-text">Sort by: </span>
+                                                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                                        <span class="slds-truncate" title="Amount Due">Amount Due</span>
+                                                        <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                                <use xlink="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"></use>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Amount Due column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-538" max="1000" min="20" tabindex="0" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th aria-label="Days Overdue" aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                                                <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
+                                                    <span class="slds-assistive-text">Sort by: </span>
+                                                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                                        <span class="slds-truncate" title="Days Overdue">Days Overdue</span>
+                                                        <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                                <use xlink="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"></use>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Days Overdue column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-539" max="1000" min="20" tabindex="0" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th aria-label="Total" aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                                                <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="-1">
+                                                    <span class="slds-assistive-text">Sort by: </span>
+                                                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                                        <span class="slds-truncate" title="Total">Total</span>
+                                                        <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                                <use xlink="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"></use>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Total column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-602" max="1000" min="20" tabindex="-1" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th aria-label="Status" aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                                                <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="-1">
+                                                    <span class="slds-assistive-text">Sort by: </span>
+                                                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                                        <span class="slds-truncate" title="Status">Status</span>
+                                                        <span class="slds-icon_container slds-icon-utility-arrowdown">
+                                                            <svg class="slds-icon slds-icon-text-default slds-is-sortable__icon " aria-hidden="true">
+                                                                <use xlink="/assets/icons/utility-sprite/svg/symbols.svg#arrowdown"></use>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Status column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-602" max="1000" min="20" tabindex="-1" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                            <th aria-label="Status" aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                                                <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="0">
+                                                    <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                                        <span class="slds-truncate" title="Actions">Actions</span>
+                                                    </div>
+                                                </a>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Actions column width" class="slds-resizable__input slds-assistive-text" id="cell-resize-handle-602" max="1000" min="20" tabindex="-1" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
                                         </tr>
-                                    </apex:repeat> 
-                                    
+                                    </thead>
+                                    <tbody>
+                                        <apex:repeat value="{!AllList}" var="inv">
+                                            <tr aria-selected="false" class="slds-hint-parent">
+                                                <th class="slds-cell_action-mode" scope="row">
+                                                    <div class="slds-truncate" title="{!inv.Name}">
+                                                        <!--<apex:commandLink value="{!inv.Name}" action="{!DetailController}" >
+<apex:param name="pagee" value="{!inv.id}"/>
+</apex:commandLink>-->
+                                                        <apex:outputlink value="https://dhruvsoftservicesprivateli5-dev-ed--c.vf.force.com/apex/Custom_Detailpage?id={!inv.id}">{!inv.name}</apex:outputlink> 
+                                                    </div>
+                                                </th>
+                                                <td class="slds-cell_action-mode" role="gridcell">
+                                                    <div class="slds-truncate" title="{!inv.Account__r.Name}">
+                                                        <apex:outputField value="{!inv.Account__c}"/>
+                                                    </div>
+                                                </td>
+                                                <td class="slds-cell_action-mode" role="gridcell">
+                                                    <div class="slds-truncate slds-float_right" >
+                                                        <apex:outputField value="{!inv.Invoice_Date__c}"/>
+                                                    </div>
+                                                </td>
+                                                <td class="slds-cell_action-mode" role="gridcell">
+                                                    <div class="slds-truncate slds-float_right" >
+                                                        <apex:outputField value="{!inv.Due_Date__c}"/>
+                                                    </div>
+                                                </td>
+                                                <td class="slds-cell_action-mode" role="gridcell">
+                                                    <div class="slds-truncate slds-float_right" title="{!inv.Amount_Paid__c}">
+                                                        <apex:outputField value="{!inv.Amount_Paid__c}"/>
+                                                    </div>
+                                                </td>
+                                                <td class="slds-cell_action-mode" role="gridcell">
+                                                    <div class="slds-truncate slds-float_right" title="{!inv.Amount_Due__c}">
+                                                        <apex:outputField value="{!inv.Amount_Due__c}"/>
+                                                    </div>
+                                                </td>
+                                                <td class="slds-cell_action-mode" role="gridcell">
+                                                    <div class="slds-truncate slds-float_right" title="{!inv.Days_Overdue__c}">
+                                                        <apex:outputField value="{!inv.Days_Overdue__c}"/>
+                                                    </div>
+                                                </td>
+                                                <td class="slds-cell_action-mode" role="gridcell">
+                                                    <div class="slds-truncate slds-float_right" title="{!inv.Total__c}">
+                                                        <apex:outputField value="{!inv.Total__c}"/>
+                                                    </div>
+                                                </td>
+                                                <td class="slds-cell_action-mode" role="gridcell">
+                                                    <div class="slds-truncate" title="{!inv.Status__c}">
+                                                        <apex:outputField value="{!inv.Status__c}"/>
+                                                    </div>
+                                                </td>
+                                                <td class="slds-cell_action-mode" role="gridcell">
+                                                    <div class="slds-truncate">
+                                                        <apex:commandLink action="{!editData}" reRender="popup" value="Edit" >
+                                                            <apex:param name="invoiceid" value="{!inv.Id}" assignTo="{!SelectedInvoiceId}"/>
+                                                        </apex:commandLink>&nbsp;|&nbsp;
+                                                        <apex:commandLink action="{!DeleteAccount}"  reRender="form,delete" value="Delete">
+                                                            <apex:param name="invoiceid" value="{!inv.Id}" assignTo="{!SelectedInvoiceId}"/>
+                                                        </apex:commandLink>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </apex:repeat>
+                                    </tbody>
                                 </table>
                                 
                             </div>
-                            <div>
-                                
-                                <center> <apex:commandButton value="New" action="{!showPopup}" rerender="popup" status="status"  /></center>
-                                
-                            </div>
+                            
                         </body>
                     </html>
                 </apex:pageBlock>
             </apex:outputPanel>
             
         </apex:pageBlock>
-        
+        <div>
+            <br/>
+            <center> <apex:commandButton value="New" action="{!showPopup}" rerender="popup" status="status"  /></center>
+            
+        </div>
     </apex:form>
+    
     
 </apex:page>
