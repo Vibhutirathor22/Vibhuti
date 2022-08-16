@@ -2,25 +2,18 @@ public  class TestPopup {
     
     public Boolean displayPopup {get;set;}
     Public Invoice__c inv {set;get;}
+    Public Invoice__c invoice{get;set;}
     public list<Invoice__c> AllList{get;set;}
     public string SelectedInvoiceId { get; set; }
     public string Choose {get;set;}
-    
     public TestPopup() {
-        
         inv= new Invoice__c();
         InvoiceListController();
-        
     }
-    
     public void InvoiceListController()
     {
         AllList=[SELECT Id,Name,Account__r.Name,owner.name,Amount_Due__c,Amount_Paid__c,Days_Overdue__c,Due_Date__c,Invoice_Date__c,Status__c,Total__c FROM Invoice__c];
     }
-    
-    
-    
-    
     public void saveInvoice(){
         Integer status = 0;
         list<Invoice__c> verifyData = [Select id,name from Invoice__c];
@@ -36,24 +29,71 @@ public  class TestPopup {
             update inv;
             status=0;
         }
-        
         InvoiceListController();
         displaypopup = false;
     }
     public void showPopup()
     {
-        
         displayPopup = true;
         
-        
     }
-    
     public void closePopup() {
         displayPopup = false;
+    }
+    public void editData(){
+        showPopup();
+        for(Invoice__c Data:[SELECT Id,Name, Account__r.name,Amount_Due__c,Amount_Paid__c,Days_Overdue__c,Due_Date__c,Invoice_Date__c,Status__c,Total__c  FROM Invoice__c where id=:SelectedInvoiceId]){
+            inv.Account__c = Data.Account__c;         
+            inv.Amount_Paid__c = Data.Amount_Paid__c;
+            inv.Due_Date__c = Data.Due_Date__c;
+            inv.Invoice_Date__c = Data.Invoice_Date__c;
+            inv.Total__c = Data.Total__c;
+        }
+    }
+    public void displayConfirm() {
+        ApexPages.addmessage(new ApexPages.message(ApexPages.severity.CONFIRM,'Showing Confirmation!'));
+    }
+    public void DeleteAccount()
+        
+    {
+        System.debug('SelectedInvoiceId' +SelectedInvoiceId);
+        // if for any reason we are missing the reference
+        
+        
+        if (SelectedInvoiceId == null) {
+            
+            return;
+        }
+        
+        // find the account record within the collection
+        
+        Invoice__c invdelete = null;
+        for(Invoice__c a : AllList)
+            if (a.Id == SelectedInvoiceId) {
+                invdelete = a;
+                break;
+            }
+        
+        //if account record found delete it
+        if (invdelete != null) {
+            try{
+                System.debug('Success' +invdelete);
+                
+                Delete invdelete; 
+                ApexPages.AddMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Deleted'));
+                
+            }
+            catch(Exception E)
+            {
+                
+            }
+            
+        }
+        
+        //refresh the data
+        InvoiceListController();
         
     }
-    
-    
     
     
     
