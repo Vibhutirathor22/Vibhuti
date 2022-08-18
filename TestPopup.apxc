@@ -1,14 +1,18 @@
 public  class TestPopup {
-    
+    public Invoice__c mydtpList {set;get;}
+    public  id tid{get;set;}
     public Boolean displayPopup {get;set;}
+    public Boolean boost {get;set;}
+    public Boolean arw {get;set;}
+    public Boolean arw2 {get;set;}
     Public Invoice__c inv {set;get;}
-    Public Invoice__c invoice{get;set;}
     public list<Invoice__c> AllList{get;set;}
     public string SelectedInvoiceId { get; set; }
-    public string Choose {get;set;}
     public TestPopup() {
         inv= new Invoice__c();
         InvoiceListController();
+        arw=true;
+        arw2=false;
     }
     public void InvoiceListController()
     {
@@ -50,51 +54,193 @@ public  class TestPopup {
             inv.Total__c = Data.Total__c;
         }
     }
-    public void displayConfirm() {
-        ApexPages.addmessage(new ApexPages.message(ApexPages.severity.CONFIRM,'Showing Confirmation!'));
-    }
     public void DeleteAccount()
         
     {
-        System.debug('SelectedInvoiceId' +SelectedInvoiceId);
-        // if for any reason we are missing the reference
-        
-        
         if (SelectedInvoiceId == null) {
-            
             return;
         }
-        
-        // find the account record within the collection
-        
         Invoice__c invdelete = null;
         for(Invoice__c a : AllList)
             if (a.Id == SelectedInvoiceId) {
                 invdelete = a;
                 break;
             }
-        
-        //if account record found delete it
         if (invdelete != null) {
             try{
-                System.debug('Success' +invdelete);
-                
                 Delete invdelete; 
-                ApexPages.AddMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Deleted'));
-                
+                ApexPages.addmessage(new ApexPages.message(ApexPages.severity.CONFIRM,'Deleted'));
             }
             catch(Exception E)
             {
-                
+                ApexPages.message errormessage = new ApexPages.Message(ApexPages.Severity.ERROR,'Error Occured');
             }
-            
         }
-        
         //refresh the data
         InvoiceListController();
+    }
+    public void DetailController()
+    {
+        tid = ApexPages.currentPage().getParameters().get('id');
+        mydtpList =[SELECT Id,Name, Account__r.name,Amount_Due__c,Amount_Paid__c,Days_Overdue__c,Due_Date__c,Invoice_Date__c,Status__c,Total__c  FROM Invoice__c where id =:tid LIMIT 1];
         
     }
-    
-    
+    public Pagereference back(){
+        return page.mypopupcustompage;
+    }
+    Public Void sortAscDesc(){
+        
+        if(boost==true)
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Name DESC];
+            boost=false;
+            arw=true;
+            arw2=false;
+        }
+        else
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Name ASC];
+            boost=true;
+            arw=false;
+            arw2=true;
+        }
+    }
+    Public Void sortAscDesc1(){
+        
+        if(boost==true)
+        {
+            
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Account__r.Name DESC];
+            boost=false;
+            arw=true;
+            arw2=false;
+        }
+        else
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Account__r.Name ASC];
+            boost=true;
+            arw=false;
+            arw2=true;
+        }
+    }
+    Public Void sortAscDesc2(){
+        
+        if(boost==true)
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Invoice_Date__c DESC];
+            boost=false;
+            arw=true;
+            arw2=false;
+        }
+        else
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Invoice_Date__c ASC];
+            boost=true;
+            arw=false;
+            arw2=true;
+        }
+    }
+    Public Void sortAscDesc3(){
+        
+        if(boost==true)
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Due_Date__c DESC];
+            boost=false;
+            arw=true;
+            arw2=false;
+        }
+        else
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Due_Date__c ASC];
+            boost=true;
+            arw=false;
+            arw2=true;
+        }
+    }
+    Public Void sortAscDesc4(){
+        
+        if(boost==true)
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Amount_Paid__c DESC];
+            boost=false;
+            arw=true;
+            arw2=false;
+        }
+        else
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Amount_Paid__c ASC];
+            boost=true;
+            arw=false;
+            arw2=true;
+        }
+    }
+    Public Void sortAscDesc5(){
+        
+        if(boost==true)
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Amount_Due__c DESC];
+            boost=false;
+            arw=true;
+            arw2=false;
+        }
+        else
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Amount_Due__c ASC];
+            boost=true;
+            arw=false;
+            arw2=true;
+        }
+    }
+    Public Void sortAscDesc6(){
+        
+        if(boost==true)
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Days_Overdue__c DESC];
+            boost=false;
+            arw=true;
+            arw2=false;
+        }
+        else
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Days_Overdue__c ASC];
+            boost=true;
+            arw=false;
+            arw2=true;
+        }
+    }
+    Public Void sortAscDesc7(){
+        
+        if(boost==true)
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Total__c DESC];
+            boost=false;
+            arw=true;
+            arw2=false;
+        }
+        else
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Total__c ASC];
+            boost=true;
+            arw=false;
+            arw2=true;
+        }
+    }
+    Public Void sortAscDesc8(){
+        
+        if(boost==true)
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Status__c DESC];
+            boost=false;
+            arw=true;
+            arw2=false;
+        }
+        else
+        {
+            AllList = [SELECT id,Name,Account__r.Name, Days_Overdue__c, Due_Date__c, Invoice_Date__c, Amount_Paid__c, Amount_Due__c, Status__c,Total__c  FROM Invoice__c ORDER BY Status__c ASC];
+            boost=true;
+            arw=false;
+            arw2=true;
+        }
+    }
     
 }
