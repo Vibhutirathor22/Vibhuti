@@ -1,4 +1,4 @@
-<apex:page controller="DetailController" lightningStylesheets="true" >
+<apex:page controller="TestPopup" lightningStylesheets="true" >
   <apex:slds />
   <apex:form > 
       <br/>
