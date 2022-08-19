@@ -1,0 +1,9 @@
+public class invoice {
+    @AuraEnabled(cacheable=true)
+      public static List<Invoice__c> fetchAcc (id RecId){
+          string query= 'SELECT Id,Name,Account__r.id,Account__r.Name,owner.name,Amount_Due__c,Amount_Paid__c,Days_Overdue__c,Due_Date__c,Invoice_Date__c,Status__c,Total__c FROM Invoice__c where Account__r.id  = :RecId';
+          
+           return Database.query( query );
+          
+      }  
+  }
