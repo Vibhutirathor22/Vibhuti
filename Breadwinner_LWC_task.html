@@ -1,74 +1,29 @@
 <template>
-    <lightning-card title='Related Invoices' icon-name="custom:custom11">
-    
-        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
-            <thead>
-                <tr class="slds-line-height_reset">
-                  <th class="" scope="col">
-                    <div class="slds-truncate" title="Invoice number">Invoice number</div>
-                  </th>
-                  <th class="" scope="col">
-                    <div class="slds-truncate" title="Total">Total</div>
-                  </th>
-                  <th class="" scope="col">
-                    <div class="slds-truncate" title="Account Name">Account Name</div>
-                  </th>
-                  <th class="" scope="col">
-                    <div class="slds-truncate" title="Amount Due">Amount Due</div>
-                  </th>
-                  <th class="" scope="col">
-                    <div class="slds-truncate" title="Invoice Date">Invoice Date</div>
-                  </th>
-                  <th class="" scope="col">
-                    <div class="slds-truncate" title="Due Date">Due Date</div>
-                  </th>
-                  <th class="" scope="col">
-                    <div class="slds-truncate" title="Days Overdue">Days Overdue</div>
-                  </th>
-                  <th class="" scope="col">
-                    <div class="slds-truncate" title="Status">Status</div>
-                  </th>
-                  <th class="" scope="col">
-                    <div class="slds-truncate" title="Amount Paid">Amount Paid</div>
-                  </th>
-
-                 
-                </tr>
-              </thead>
-              <tbody>
-                <template for:each={inv.data} for:item="contact"> 
-                <tr class="" key = {contact.Id}>
-                        <td data-label="Invoice number">
-                            <div class="slds-cell-wrap"><a href="javascript:void(0);">{contact.Name}</a></div>
-                        </td>
-                        <td data-label="Total">
-                            <div class="slds-cell-wrap">{contact.Total__c}</div>
-                        </td>
-                        <td data-label="Account Name">
-                            <div class="slds-cell-wrap">{contact.Account__r.Name}</div>
-                        </td>
-                        <td data-label="Amount Due">
-                            <div class="slds-cell-wrap">{contact.Amount_Due__c}</div>
-                        </td>
-                        <td data-label="Invoice Date">
-                            <div class="slds-cell-wrap">{contact.Invoice_Date__c}</div>
-                        </td>
-                        <td data-label="Due Date">
-                            <div class="slds-cell-wrap">{contact.Due_Date__c}</div>
-                        </td>
-                        <td data-label="Days Overdue">
-                            <div class="slds-cell-wrap">{contact.Days_Overdue__c}</div>
-                        </td>
-                        <td data-label="Status">
-                            <div class="slds-cell-wrap">{contact.Status__c}</div>
-                        </td>
-                        <td data-label="Amount Paid">
-                            <div class="slds-cell-wrap">{contact.Amount_Paid__c}</div>
-                        </td>
-                </tr>
-                </template>
-            </tbody>
-        </table>
-        
-    </lightning-card>
+<lightning-card>
+    <lightning-accordion allow-multiple-sections-open>
+        <lightning-accordion-section name="A" label="Summary Information">
+              <ul class="slds-list_ordered">
+                <li class="slds-p-left_small"> Paid: {invPaid.data} <br></li>
+                <li class="slds-p-left_small">Current Due: {invDue.data}<br></li>
+                <li class="slds-p-left_small">Overdue:<br>
+                  <ul class="slds-list_dotted slds-p-left_large slds-p-bottom_xx-small">
+                    <li>1 - 30 = {invThirty.data}</li>
+                    <li>31 - 60 = {invSixty.data}</li>
+                    <li>61- 90 = {invNinty.data}</li>
+                    <li>90 + = {invNintyP.data}</li>
+                    <li>Total Overdue:{invTotalOverdue.data}</li>
+                  </ul>
+                </li>
+                <li>Total Receivables: {invTotRec.data}</li>
+              </ul>          
+        </lightning-accordion-section>
+        <lightning-accordion-section name="B" label="Related Invoice List">          
+            <lightning-datatable 
+            data={invList} 
+            columns={Columns} 
+            key-field="Id">
+            </lightning-datatable>
+        </lightning-accordion-section>       
+    </lightning-accordion>
+  </lightning-card>
 </template>
