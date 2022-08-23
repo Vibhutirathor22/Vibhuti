@@ -1,9 +1,46 @@
 public class invoice {
-    @AuraEnabled(cacheable=true)
-      public static List<Invoice__c> fetchAcc (id RecId){
-          string query= 'SELECT Id,Name,Account__r.id,Account__r.Name,owner.name,Amount_Due__c,Amount_Paid__c,Days_Overdue__c,Due_Date__c,Invoice_Date__c,Status__c,Total__c FROM Invoice__c where Account__r.id  = :RecId';
-          
-           return Database.query( query );
-          
-      }  
-  }
+     @AuraEnabled(cacheable=true)
+       public static List<Invoice__c> fetchInv (id RecId){
+            return [SELECT Id,Name,Account__r.id,Account__r.Name,owner.name,Amount_Due__c,Amount_Paid__c,Days_Overdue__c,Due_Date__c,Invoice_Date__c,Status__c,Total__c FROM Invoice__c where Account__r.id  = :RecId];          
+       }  
+       @AuraEnabled(cacheable=true)
+       public static Integer fetchInvPaid (string RecId){
+            return [SELECT COUNT() FROM Invoice__c WHERE Status__c='Paid' and Account__r.id=:RecId ];          
+       }
+       @AuraEnabled(cacheable=true)
+       public static Integer fetchInvDue (string RecId){
+            return [SELECT COUNT() FROM Invoice__c WHERE Status__c='Due' and Account__r.id=:RecId ];          
+       }
+       @AuraEnabled(cacheable=true)
+       public static Integer fetchInvtotalrec (string RecId){
+            return [SELECT  COUNT() FROM Invoice__c WHERE  Status__c !='Paid' and Account__r.id=:RecId ];          
+       }
+       @AuraEnabled(cacheable=true)
+       public static Integer fetchInvThirty (string RecId){
+         
+            return [SELECT  COUNT() FROM Invoice__c WHERE  Days_Overdue__c >= 1 AND Days_Overdue__c<=30   and Account__r.id=:RecId ];          
+       }
+       @AuraEnabled(cacheable=true)
+       public static  Integer fetchInvtSixty (string RecId){
+          return [SELECT  COUNT() FROM Invoice__c WHERE  Days_Overdue__c >= 31 AND Days_Overdue__c<=60   and Account__r.id=:RecId ];   
+         }
+       @AuraEnabled(cacheable=true)
+       public static Integer fetchInvNinty (string RecId){
+          return [SELECT  COUNT() FROM Invoice__c WHERE  Days_Overdue__c >= 61 AND Days_Overdue__c<=90   and Account__r.id=:RecId ];    
+        }
+       
+       @AuraEnabled(cacheable=true)
+       public static Integer fetchInvNintyP (string RecId){
+          return [SELECT  COUNT() FROM Invoice__c WHERE  Days_Overdue__c>90   and Account__r.id=:RecId ];     
+       }
+       @AuraEnabled(cacheable=true)
+       public static Integer totalOverdue (string RecId){
+          return [SELECT  COUNT() FROM Invoice__c WHERE  Status__c ='Overdue'  and Account__r.id=:RecId ];     
+       }
+       
+       @AuraEnabled(cacheable=true)
+       public static List<Invoice__c> fetchInvTotOver (string RecId){
+            return [SELECT Id,Name,Account__r.id,Account__r.Name,owner.name,Amount_Due__c,Amount_Paid__c,Days_Overdue__c,Due_Date__c,Invoice_Date__c,Status__c,Total__c FROM Invoice__c where Status__c !='Paid' and Account__r.id=:RecId ];          
+       }
+ 
+   }
