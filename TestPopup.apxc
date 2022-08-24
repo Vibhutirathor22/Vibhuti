@@ -54,7 +54,7 @@ public  class TestPopup {
             inv.Total__c = Data.Total__c;
         }
     }
-    public void DeleteAccount()
+    public void DeleteInvoice()
         
     {
         if (SelectedInvoiceId == null) {
