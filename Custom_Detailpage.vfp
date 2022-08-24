@@ -1,20 +1,23 @@
 <apex:page controller="TestPopup" lightningStylesheets="true" >
-  <apex:slds />
-  <apex:form > 
-      <br/>
-      <center><b> <div class="slds-text-heading_medium">Details</div></b></center>
-  <apex:pageBlock >
-          <apex:pageBlockSection >
-              <apex:outputField value="{!mydtpList.Name}" label="Invoice Number"/>
-               <apex:outputField value="{!mydtpList.Account__c}" label="Account Name"/>
-               <apex:outputField value="{!mydtpList.Total__c}" label="Total"/>
-               <apex:outputField value="{!mydtpList.Amount_Paid__c}" label="Amount Paid"/>
-               <apex:outputField value="{!mydtpList.Amount_Due__c}" label="Amount Due"/>
-               <apex:outputField value="{!mydtpList.Due_Date__c}" label="Due Date"/>
-              <apex:outputField value="{!mydtpList.Invoice_Date__c}" label="Invoice Date"/>
-              <apex:outputField value="{!mydtpList.Days_Overdue__c}" label="Days Overdue"/>
-              <apex:outputField value="{!mydtpList.Status__c}" label="Status"/>
-          </apex:pageBlockSection>
-      </apex:pageBlock>
-  </apex:form>
+    <apex:slds />
+    <apex:form > 
+        <br/>
+        <center><b> <div class="slds-text-heading_medium">Details</div></b></center>
+        <br/>
+    <apex:pageBlock >
+        <apex:pageBlockSection >
+            <apex:outputField value="{!mydtpList.Name}" label="Invoice Number"/>
+            <apex:outputField value="{!mydtpList.Account__c}" label="Account Name"/>
+            <apex:outputField value="{!mydtpList.Total__c}" label="Total"/>
+            <apex:outputField value="{!mydtpList.Amount_Paid__c}" label="Amount Paid"/>
+            <apex:outputField value="{!mydtpList.Amount_Due__c}" label="Amount Due"/>
+            <apex:outputField value="{!mydtpList.Due_Date__c}" label="Due Date"/>
+            <apex:outputField value="{!mydtpList.Invoice_Date__c}" label="Invoice Date"/>
+            <apex:outputField value="{!mydtpList.Days_Overdue__c}" label="Days Overdue"/>
+            <apex:outputField value="{!mydtpList.Status__c}" label="Status"/>
+        </apex:pageBlockSection>
+         <center> <apex:commandButton value="Back" action="{!back}"  /></center>
+    
+        </apex:pageBlock>
+    </apex:form>
 </apex:page>
