@@ -1,66 +1,78 @@
-<template>
-<lightning-card>
-  <h4 class="slds-section-title--divider seccolor" ><b>Summary Information of {accname} Account</b></h4><br>
-              <table border="1px" class="slds-table  slds-table_striped">
-                <tbody>
-                  <tr	>
-                    <td colspan="2" style="background:#e0edf5;"><b>Paid</b></td>
-                    <td style="background:#e0edf5;">{invPaid.data}</td>
-                  </tr>
-                  <tr>
-                   
-                    <td colspan="2" ><b>Current Due</b></td>
-                    <td>{invDue.data}</td>
-                  </tr>
-                  <tr>
-                    <td rowspan="5" colspan="1" style="background:#e0edf5;"><b>Overdue</b></td>
-                     <td style="background:#e0edf5;">1 - 30
-                    </td>
-                    <td style="background:#e0edf5;">{invThirty.data}
-                    </td>
-                  </tr>
-                    <tr>
-                     <td> 31 - 60
-                    </td>
-                    <td>{invSixty.data}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="background:#e0edf5;">61- 90
-                   </td>
-                   <td style="background:#e0edf5;"> {invNinty.data}
-                  </td>
-                 </tr>
-                 <tr>
-                  <td>90 +
-                 </td>
-                 <td>{invNintyP.data}
-                </td>
-               </tr>
-               <tr>
-                <td style="background:#e0edf5;">Total Overdue
-               </td>
-               <td style="background:#e0edf5;">{invTotalOverdue.data}
-              </td>
-             </tr>
-                  <tr>
-                  
-                    <td colspan="2"><b>Total Receivables</b></td>
-                    <td> {invTotRec.data}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </lightning-card>
-              <lightning-card >
-         
-            <h4 class="slds-section-title--divider seccolor" ><b>Related Invoices of {accname} Account</b></h4><br>    
-            <div style="height: 350px" class="slds-table_col-bordered slds-table_bordered">
-            <lightning-datatable 
-            data={invList} 
-            columns={Columns} 
-            key-field="Id">
-            
-            </lightning-datatable>
-          </div>
-  </lightning-card>
-</template>
+import { LightningElement,wire,api,track } from 'lwc';
+import fetchInv from '@salesforce/apex/invoice.fetchInv';
+import fetchInvPaid from '@salesforce/apex/invoice.fetchInvPaid';
+import fetchInvDue from '@salesforce/apex/invoice.fetchInvDue';
+import fetchInvtotalrec from '@salesforce/apex/invoice.fetchInvtotalrec';
+import fetchInvThirty from '@salesforce/apex/invoice.fetchInvThirty';
+import fetchInvtSixty from '@salesforce/apex/invoice.fetchInvtSixty';
+import fetchInvNinty from '@salesforce/apex/invoice.fetchInvNinty';
+import fetchInvNintyP from '@salesforce/apex/invoice.fetchInvNintyP';
+import totalOverdue from '@salesforce/apex/invoice.totalOverdue';
+export default class invoice extends LightningElement {
+    
+    @track  Columns = [
+        { label: 'Invoice number', fieldName: 'Id', type: 'url',typeAttributes: {label: {fieldName: 'Name'}, target: '_blank'}},
+        { label: 'Total', fieldName: 'Total__c', type: 'Currency' },
+        { label: 'Invoice Date', fieldName: 'Invoice_Date__c',type: 'date'  },
+        { label: 'Due Date', fieldName: 'Due_Date__c',type: 'date' },
+        { label: 'Status', fieldName: '', cellAttributes: { iconName: { fieldName: 'Status__c' } , class: { fieldName: 'variant' }}},
+        { label: 'Amount Paid', fieldName: 'Amount_Paid__c', type: 'Amount_Paid__c',type: 'Currency'},
+        { label: 'Days Overdue', fieldName: 'Days_Overdue__c', type: 'Days_Overdue__c',type: 'Number'}
+    ];
+     @track accname;
+    @track error;
+    @track invList ;
+    @track invPaid ;
+    @track invDue ;
+    @track invThirty;
+    @track invSixty;
+    @track invNinty;
+    @track invNintyP;
+    @track invTotalOverdue;
+    @track invTotRec;
+    @api recordId;
+    @wire(fetchInv,{RecId:'$recordId'})
+     
+        wiredvoice({
+            error,
+            data
+        }) {
+            if (data) {
+           let invParsedData=JSON.parse(JSON.stringify(data));
+            invParsedData.forEach(inv => {
+                if(inv.Id){
+                //inv.Parent_invount_Name=inv.Parent.Name;
+                inv.Id='/lightning/r/Invoice__c/'+inv.Id+'/view';
+                inv.label=inv.Name;
+                if(inv.Status__c.includes("Paid")){
+                    inv.Status__c='action:priority';
+                    inv.variant='slds-icon slds-icon-text-success';
+                }else if(inv.Status__c.includes("Overdue"))
+                {
+                    inv.Status__c='action:priority';
+                    inv.variant='slds-icon slds-icon-text-error';
+                }
+                else{
+                    inv.Status__c='action:priority';
+                    inv.variant='slds-icon slds-icon-text-warning';
+                }
+                }
+            });
+            this.invList = invParsedData;
+            this.accname=invParsedData[0].Account__r.Name;
+            } else if (error) {
+                this.error = error;
+            }
+        }
+        @wire(fetchInvPaid,{RecId:'$recordId'})invPaid;
+        @wire(fetchInvDue,{RecId:'$recordId'})invDue;
+        @wire(fetchInvThirty,{RecId:'$recordId'})invThirty;
+        @wire(fetchInvtSixty,{RecId:'$recordId'})invSixty;
+        @wire(fetchInvNinty,{RecId:'$recordId'})invNinty;
+        @wire(fetchInvNintyP,{RecId:'$recordId'})invNintyP;
+        @wire(totalOverdue,{RecId:'$recordId'})invTotalOverdue;  
+        @wire(fetchInvtotalrec,{RecId:'$recordId'})invTotRec;
+
+
+        
+    }
