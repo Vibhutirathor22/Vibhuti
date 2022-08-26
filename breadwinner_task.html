@@ -1,29 +1,62 @@
 <template>
-<lightning-card>
-    <lightning-accordion allow-multiple-sections-open>
-        <lightning-accordion-section name="A" label="Invoices Summary Information">
-              <ul class="slds-list_ordered">
-                <li class="slds-p-left_small"> Paid: {invPaid.data} <br></li>
-                <li class="slds-p-left_small">Current Due: {invDue.data}<br></li>
-                <li class="slds-p-left_small">Overdue:<br>
-                  <ul class="slds-list_dotted slds-p-left_large slds-p-bottom_xx-small">
-                    <li>1 - 30 = {invThirty.data}</li>
-                    <li>31 - 60 = {invSixty.data}</li>
-                    <li>61- 90 = {invNinty.data}</li>
-                    <li>90 + = {invNintyP.data}</li>
-                    <li>Total Overdue:{invTotalOverdue.data}</li>
-                  </ul>
-                </li>
-                <li>Total Receivables: {invTotRec.data}</li>
-              </ul>          
-        </lightning-accordion-section>
-        <lightning-accordion-section name="B" label="Related Invoice List">          
+<lightning-card title="Summary Information of All Related Invoices" class="cols">
+     
+              <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_striped slds-has-dividers_bottom-space">
+                <tbody>
+                  <tr>
+                    <td colspan="2">Paid</td>
+                    <td >{invPaid.data}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">Current Due</td>
+                    <td>{invDue.data}</td>
+                  </tr>
+                  <tr>
+                    <td rowspan="5" colspan="1">Overdue</td>
+                     <td> &nbsp;&nbsp;&nbsp;&nbsp;1 - 30
+                    </td>
+                    <td>{invThirty.data}
+                    </td>
+                  </tr>
+                    <tr>
+                     <td> 31 - 60
+                    </td>
+                    <td>{invSixty.data}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>61- 90
+                   </td>
+                   <td> {invNinty.data}
+                  </td>
+                 </tr>
+                 <tr>
+                  <td>90 +
+                 </td>
+                 <td>{invNintyP.data}
+                </td>
+               </tr>
+               <tr>
+                <td>Total Overdue
+               </td>
+               <td>{invTotalOverdue.data}
+              </td>
+             </tr>
+                  <tr>
+                    <td colspan="2">Total Receivables</td>
+                    <td> {invTotRec.data}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </lightning-card>
+              <lightning-card title="Related Invoice List">
+          <div style="height: 300px">     
             <lightning-datatable 
             data={invList} 
             columns={Columns} 
             key-field="Id">
+            
             </lightning-datatable>
-        </lightning-accordion-section>       
-    </lightning-accordion>
+          </div>
   </lightning-card>
 </template>
