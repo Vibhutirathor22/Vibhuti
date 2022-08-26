@@ -2,13 +2,9 @@
 --slds-c-icon-color-background:#ffffff;
 }
 table, th, td {
-    border: 1px solid;
-    border-collapse: collapse;
-  }
-  th, td {
-    border-style: solid;
-  }
-  .cols{
-background: 7eb9d6;
-
-  }
+  border:1px solid black;
+  border-collapse: collapse;
+}
+.seccolor{
+  background:#46b3de;
+}
