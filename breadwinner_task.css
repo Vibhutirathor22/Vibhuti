@@ -1,3 +1,14 @@
 :host{
 --slds-c-icon-color-background:#ffffff;
 }
+table, th, td {
+    border: 1px solid;
+    border-collapse: collapse;
+  }
+  th, td {
+    border-style: solid;
+  }
+  .cols{
+background: 7eb9d6;
+
+  }
