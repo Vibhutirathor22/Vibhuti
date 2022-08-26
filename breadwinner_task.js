@@ -19,6 +19,7 @@ export default class invoice extends LightningElement {
         { label: 'Amount Paid', fieldName: 'Amount_Paid__c', type: 'Amount_Paid__c',type: 'Currency'},
         { label: 'Days Overdue', fieldName: 'Days_Overdue__c', type: 'Days_Overdue__c',type: 'Number'}
     ];
+
     @track error;
     @track invList ;
     @track invPaid ;
@@ -70,5 +71,7 @@ export default class invoice extends LightningElement {
         @wire(fetchInvNintyP,{RecId:'$recordId'})invNintyP;
         @wire(totalOverdue,{RecId:'$recordId'})invTotalOverdue;  
         @wire(fetchInvtotalrec,{RecId:'$recordId'})invTotRec;
+
+
+        
     }
-   
