@@ -1,66 +1,78 @@
 <template>
 <lightning-card>
-  <h4 class="slds-section-title--divider seccolor" ><b>Invoices Details of {accname}</b></h4><br>
-              <table border="1px" class="slds-table  slds-table_striped">
-                <tbody>
-                  <tr	>
-                    <td colspan="2" style="background:#e0edf5;"><b>Paid</b></td>
-                    <td style="background:#e0edf5;">{invPaid.data}</td>
-                  </tr>
-                  <tr>
-                   
-                    <td colspan="2" ><b>Current Due</b></td>
-                    <td>{invDue.data}</td>
-                  </tr>
-                  <tr>
-                    <td rowspan="5" colspan="1" style="background:#e0edf5;"><b>Overdue</b></td>
-                     <td style="background:#e0edf5;">1 - 30
-                    </td>
-                    <td style="background:#e0edf5;">{invThirty.data}
-                    </td>
-                  </tr>
-                    <tr>
-                     <td> 31 - 60
-                    </td>
-                    <td>{invSixty.data}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="background:#e0edf5;">61- 90
-                   </td>
-                   <td style="background:#e0edf5;"> {invNinty.data}
-                  </td>
-                 </tr>
-                 <tr>
-                  <td>90 +
-                 </td>
-                 <td>{invNintyP.data}
-                </td>
-               </tr>
-               <tr>
-                <td style="background:#e0edf5;">Total Overdue
-               </td>
-               <td style="background:#e0edf5;">{invTotalOverdue.data}
-              </td>
-             </tr>
-                  <tr>
-                  
-                    <td colspan="2"><b>Total Receivables</b></td>
-                    <td> {invTotRec.data}</td>
-                  </tr>
-                </tbody>
-              </table>
+  <h4 class="slds-section-title--divider seccolor" ><b> Invoices Details of {accname}</b></h4><br>
+  <div class="slds-box " style="padding:10px;background-color:white;">
+    <div class="slds-box slds-wrap dv" style="border-radius:15px;background-color:#66caf1;color: rgb(5, 4, 4);">
+        <div class="slds-grid">
+          <div class="slds-col slds-size_1-of-4 chn  "  >
+            <div>
+                <h1 class="slds-page-header__title  slds-truncate" >
+                    Paid Invoices:
+                </h1>
+            </div>
+            <div style="font-size:3em; text-align:left;" class="slds-grid_vertical-align-center"  >
+                {invPaid.data}
+            </div>
+          </div>
+       
+            <div class="slds-col slds-size_1-of-4 chn"  >
+                <div>
+                    <h1 class="slds-page-header__title  slds-truncate">
+                        Current Due Invoices:
+                    </h1>
+                </div>
+                <div style="font-size:3em;">
+                    {invDue.data}
+                </div>
+                </div>
+                <div class="slds-col slds-size_1-of-4 chn" >
+                    <div>
+                        <h1 class="slds-page-header__title slds-truncate">
+                            Total Receivables:
+                        </h1>
+                    </div>
+                    <div style="font-size:3em;">
+                        ${invTotRec.data}
+                    </div>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4" >
+                        <div>
+                            <h1 class="slds-page-header__title slds-truncate">
+                              <div class="container">
+                                <ul class="myUL">
+                                Overdue Invoices Between:<br>
+                                1 - 30 Days :{invThirty.data}<br>
+                                31 - 60 Days : {invSixty.data}<br>
+                                61- 90 Days : {invNinty.data}<br>
+                                90 + Days :{invNintyP.data}<br>
+                              Total Overdue Invoices:{invTotalOverdue.data} <br>
+                            </ul>
+                            </div>
+                            </h1>
+                        </div>
+                        <div style="font-size:3em;">
+                            
+                        </div>
+                        </div>
+        </div>
+    </div>
+</div>
             </lightning-card>
+            
               <lightning-card >
          
-            <h4 class="slds-section-title--divider seccolor" ><b>Related Invoices of {accname} Account</b></h4><br>    
-            <div style="height: 350px" class="slds-table_col-bordered slds-table_bordered">
+            <h4 class="slds-section-title--divider seccolor" ><b>Related Invoices of {accname}</b></h4><br>    
+            <div style="height: 350px" class=" slds-table_bordered">
             <lightning-datatable 
-            data={invList} 
+            data={data} 
             columns={Columns} 
-            key-field="Id">
-            
+            key-field="Id"
+            sorted-by={sortBy}
+            sorted-direction={sortDirection}
+            onsort={doSorting}>
             </lightning-datatable>
+
           </div>
   </lightning-card>
+
 </template>
