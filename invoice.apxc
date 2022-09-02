@@ -1,8 +1,18 @@
-public class invoice {
+public with sharing class invoice {
+     public static List<AggregateResult> su{get;set;}
+
      @AuraEnabled(cacheable=true)
-       public static List<Invoice__c> fetchInv (id RecId){
-            return [SELECT Id,Name,Account__r.id,Account__r.Name,owner.name,Amount_Due__c,Amount_Paid__c,Days_Overdue__c,Due_Date__c,Invoice_Date__c,Status__c,Total__c FROM Invoice__c where Account__r.id  = :RecId];          
-       }  
+       public static List<Invoice__c> fetchInv (id RecId ,String field, String sortOrder)
+       {
+           system.debug('entered');
+            String query;
+            query  = 'SELECT Id,Name,Account__r.id,Account__r.Name,owner.name,Amount_Due__c,Amount_Paid__c,Days_Overdue__c,Due_Date__c,Invoice_Date__c,Status__c,Total__c FROM Invoice__c where Account__r.id  = :RecId';
+            if(field != null && sortOrder !=null){
+                query += ' ORDER BY '+field+' '+sortOrder;
+            }
+            return Database.query(query);
+        }         
+       
        @AuraEnabled(cacheable=true)
        public static Integer fetchInvPaid (string RecId){
             return [SELECT COUNT() FROM Invoice__c WHERE Status__c='Paid' and Account__r.id=:RecId ];          
@@ -39,8 +49,10 @@ public class invoice {
        }
        
        @AuraEnabled(cacheable=true)
-       public static List<Invoice__c> fetchInvTotOver (string RecId){
-            return [SELECT Id,Name,Account__r.id,Account__r.Name,owner.name,Amount_Due__c,Amount_Paid__c,Days_Overdue__c,Due_Date__c,Invoice_Date__c,Status__c,Total__c FROM Invoice__c where Status__c !='Paid' and Account__r.id=:RecId ];          
-       }
- 
+       public static Decimal fetchIvtotalrec (string RecId){
+          su = [SELECT SUM(Amount_Due__c) SUM FROM Invoice__c WHERE Account__c =:RecId];   
+          Decimal sumAmount;
+          sumAmount=Integer.valueOf(su[0].get('SUM'));
+          return sumAmount;
+      }
    }
