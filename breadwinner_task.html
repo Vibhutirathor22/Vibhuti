@@ -11,7 +11,7 @@
                 </h1>
             </div>
             <div style="font-size:3em; text-align:left;" class="slds-grid_vertical-align-center"  >
-                {invPaid.data}
+                {summaryInformation.PaidInvoicesCount}
             </div>
           </div>
        
@@ -22,7 +22,7 @@
                     </h1>
                 </div>
                 <div style="font-size:3em;">
-                    {invDue.data}
+                    {summaryInformation.dueInvoicesCount}
                 </div>
                 </div>
                 <div class="slds-col slds-size_1-of-4 chn" >
@@ -32,7 +32,7 @@
                         </h1>
                     </div>
                     <div style="font-size:3em;">
-                        ${invTotRec.data}
+                        ${summaryInformation.totalReceivablesAmount}
                     </div>
                     </div>
                     <div class="slds-col slds-size_1-of-4" >
@@ -41,11 +41,11 @@
                               <div class="container">
                                 <ul class="myUL">
                                 Overdue Invoices Between:<br>
-                                1 - 30 Days :{invThirty.data}<br>
-                                31 - 60 Days : {invSixty.data}<br>
-                                61- 90 Days : {invNinty.data}<br>
-                                90 + Days :{invNintyP.data}<br>
-                              Total Overdue Invoices:{invTotalOverdue.data} <br>
+                                1 - 30 Days :{overdue1_30}<br>
+                                31 - 60 Days :  {overdue31_60}<br>
+                                61- 90 Days :  {overdue61_90}<br>
+                                90 + Days :{overdue90}<br>
+                              Total Overdue Invoices: {totalOverdue}<br>
                             </ul>
                             </div>
                             </h1>
